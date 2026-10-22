@@ -547,7 +547,7 @@ jobs:
             {activeTab === 'bno055' && 'Hardware 9-DOF fusion with zero gyro drift. Output format is 100% compatible.'}
             {activeTab === 'python' && 'Reads serial on macOS and broadcasts via WebSockets on ws://localhost:8765.'}
             {activeTab === 'wiring' && 'Connect 3.3V to VCC (not 5V), GND to GND, GPIO21 to SDA, GPIO22 to SCL.'}
-            {activeTab === 'github' && 'Commit to .github/workflows/deploy.yml to host this exact app on GitHub Pages!'}
+            {activeTab === 'github' && 'In GitHub Repo Settings → Pages → Source, select "GitHub Actions" to allow automated deployment!'}
           </span>
           <button
             type="button"
