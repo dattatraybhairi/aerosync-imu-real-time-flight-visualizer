@@ -30,7 +30,7 @@ export const CalibrationPanel: React.FC<CalibrationPanelProps> = ({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">
+        <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
           IMU Calibration & Axis Alignment
         </span>
         <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export const CalibrationPanel: React.FC<CalibrationPanelProps> = ({
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
             title="Reset calibration offsets"
           >
             <RotateCcw className="w-3 h-3" />
@@ -56,9 +56,9 @@ export const CalibrationPanel: React.FC<CalibrationPanelProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
         {/* Inversion Toggles */}
-        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200 flex flex-col gap-2">
-          <span className="text-[11px] font-semibold text-slate-600 uppercase">Axis Inversions</span>
-          <div className="flex flex-col gap-1.5 text-xs text-slate-700">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/80 flex flex-col gap-2">
+          <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 uppercase">Axis Inversions</span>
+          <div className="flex flex-col gap-1.5 text-xs text-slate-700 dark:text-slate-300">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -90,28 +90,28 @@ export const CalibrationPanel: React.FC<CalibrationPanelProps> = ({
         </div>
 
         {/* Axis Mapping */}
-        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200 flex flex-col gap-2">
-          <span className="text-[11px] font-semibold text-slate-600 uppercase">Sensor Mounting Orientation</span>
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/80 flex flex-col gap-2">
+          <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 uppercase">Sensor Mounting Orientation</span>
           <select
             value={config.axisMapping}
             onChange={(e) => onChange({ ...config, axisMapping: e.target.value as any })}
-            className="w-full text-xs bg-white border border-slate-300 rounded-md p-1.5 text-slate-800 focus:ring-1 focus:ring-sky-500"
+            className="w-full text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md p-1.5 text-slate-800 dark:text-slate-100 focus:ring-1 focus:ring-sky-500"
           >
             <option value="default">Standard (X: Pitch, Y: Roll, Z: Yaw)</option>
             <option value="swap_xy">Swap Pitch & Roll (Rotated 90°)</option>
             <option value="swap_yz">Swap Roll & Yaw</option>
             <option value="swap_xz">Swap Pitch & Yaw (Vertical mount)</option>
           </select>
-          <span className="text-[10px] text-slate-500 leading-tight">
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
             Adjust when ESP32 IMU sensor is mounted sideways or rotated on your model.
           </span>
         </div>
 
         {/* Smoothing Filter */}
-        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200 flex flex-col gap-2">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/80 flex flex-col gap-2">
           <div className="flex items-center justify-between text-[11px]">
-            <span className="font-semibold text-slate-600 uppercase">Smoothing Filter</span>
-            <span className="font-mono text-slate-700 font-bold">
+            <span className="font-semibold text-slate-600 dark:text-slate-300 uppercase">Smoothing Filter</span>
+            <span className="font-mono text-slate-700 dark:text-slate-200 font-bold">
               {Math.round(config.smoothingFactor * 100)}%
             </span>
           </div>

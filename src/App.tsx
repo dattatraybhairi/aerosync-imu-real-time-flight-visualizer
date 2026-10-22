@@ -20,6 +20,30 @@ import { type DataSourceType } from './components/ConnectionManager';
 import { ChevronRight, ChevronLeft, Activity, Gauge } from 'lucide-react';
 
 export default function App() {
+  // Theme state (default Dark Mode as requested, with toggle & localStorage persistence)
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('aerosync_theme');
+      return saved ? saved === 'dark' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    try {
+      localStorage.setItem('aerosync_theme', darkMode ? 'dark' : 'light');
+    } catch {
+      // ignore storage errors
+    }
+  }, [darkMode]);
+
   // IMU Data states
   const [rawIMU, setRawIMU] = useState<IMUData>({
     pitch: 0,
@@ -110,12 +134,18 @@ export default function App() {
       : 'FLIGHT SIMULATION';
 
   return (
-    <div className="relative w-screen h-screen flex flex-col bg-slate-50 text-slate-800 overflow-hidden font-sans">
+    <div
+      className={`relative w-screen h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 overflow-hidden font-sans ${
+        darkMode ? 'dark' : ''
+      }`}
+    >
       {/* 1. Top Navigation Bar */}
       <TopNav
         onOpenCodeModal={() => setCodeModalOpen(true)}
         onNavigateSection={handleNavigateSection}
         activeSection={activeSection}
+        darkMode={darkMode}
+        onToggleDarkMode={() => setDarkMode((d) => !d)}
       />
 
       {/* 2. Main 3D Single-Aircraft Viewport Layer */}
@@ -126,6 +156,7 @@ export default function App() {
           cameraPreset={cameraPreset}
           showAxes={showAxes}
           showGrid={showGrid}
+          darkMode={darkMode}
         />
 
         {/* 3. Floating Left Instrument HUD */}
@@ -137,17 +168,17 @@ export default function App() {
           <div className="relative flex items-start gap-1">
             <div className="flex flex-col gap-2 max-w-[260px]">
               {/* HUD Mode Switcher */}
-              <div className="flex items-center gap-1 p-0.5 bg-white/95 border border-slate-200/90 rounded-lg shadow-xs text-[11px] font-semibold text-slate-600">
+              <div className="flex items-center gap-1 p-0.5 bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-slate-800 rounded-lg shadow-xs text-[11px] font-semibold text-slate-600 dark:text-slate-400">
                 <button
                   type="button"
                   onClick={() => setHudView('pfd')}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                     hudView === 'pfd'
-                      ? 'bg-slate-900 text-white font-bold'
-                      : 'hover:text-slate-900'
+                      ? 'bg-slate-900 dark:bg-sky-600 text-white font-bold'
+                      : 'hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
-                  <Gauge className="w-3 h-3 text-sky-400" />
+                  <Gauge className="w-3 h-3 text-sky-400 dark:text-white" />
                   <span>Attitude PFD</span>
                 </button>
                 <button
@@ -155,11 +186,11 @@ export default function App() {
                   onClick={() => setHudView('scope')}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                     hudView === 'scope'
-                      ? 'bg-slate-900 text-white font-bold'
-                      : 'hover:text-slate-900'
+                      ? 'bg-slate-900 dark:bg-sky-600 text-white font-bold'
+                      : 'hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
-                  <Activity className="w-3 h-3 text-emerald-400" />
+                  <Activity className="w-3 h-3 text-emerald-400 dark:text-white" />
                   <span>Scope</span>
                 </button>
                 <button
@@ -167,8 +198,8 @@ export default function App() {
                   onClick={() => setHudView('both')}
                   className={`px-2 py-1 rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                     hudView === 'both'
-                      ? 'bg-slate-900 text-white font-bold'
-                      : 'hover:text-slate-900'
+                      ? 'bg-slate-900 dark:bg-sky-600 text-white font-bold'
+                      : 'hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
                   Both
@@ -182,7 +213,11 @@ export default function App() {
 
               {/* Telemetry Scope */}
               {(hudView === 'scope' || hudView === 'both') && (
-                <TelemetryScope imuData={calibratedIMU} packetRate={packetRate} />
+                <TelemetryScope
+                  imuData={calibratedIMU}
+                  packetRate={packetRate}
+                  darkMode={darkMode}
+                />
               )}
             </div>
 
@@ -195,7 +230,7 @@ export default function App() {
                   ? 'Show Flight Instruments HUD'
                   : 'Collapse Flight Instruments HUD'
               }
-              className="mt-1 p-1 bg-white border border-slate-300 rounded-r-lg shadow-sm text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+              className="mt-1 p-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-r-lg shadow-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
               title={
                 hudCollapsed
                   ? 'Show Flight Instruments HUD'
@@ -213,15 +248,15 @@ export default function App() {
 
         {/* 4. Top-Right Active Aircraft & Telemetry Spec Readout */}
         <div className="absolute top-4 right-4 z-20 hidden sm:flex flex-col items-end gap-1.5 pointer-events-none select-none">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 border border-slate-200/90 rounded-lg shadow-xs text-xs font-mono text-slate-700">
-            <span className="font-bold text-slate-900">{activeMeta.name}</span>
-            <span className="text-slate-300">·</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-slate-800 rounded-lg shadow-xs text-xs font-mono text-slate-700 dark:text-slate-300">
+            <span className="font-bold text-slate-900 dark:text-white">{activeMeta.name}</span>
+            <span className="text-slate-300 dark:text-slate-600">·</span>
             <span>{activeMeta.code}</span>
-            <span className="text-slate-300">·</span>
-            <span className="text-sky-600 font-bold">{sourceLabel}</span>
+            <span className="text-slate-300 dark:text-slate-600">·</span>
+            <span className="text-sky-600 dark:text-sky-400 font-bold">{sourceLabel}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-[11px] text-slate-600 bg-white/90 px-2.5 py-1 rounded border border-slate-200/80 font-mono tabular-nums">
+          <div className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300 bg-white/90 dark:bg-slate-900/90 px-2.5 py-1 rounded border border-slate-200/80 dark:border-slate-800 font-mono tabular-nums">
             <span>Pitch: {calibratedIMU.pitch >= 0 ? `+${calibratedIMU.pitch.toFixed(1)}` : calibratedIMU.pitch.toFixed(1)}°</span>
             <span>·</span>
             <span>Roll: {calibratedIMU.roll >= 0 ? `+${calibratedIMU.roll.toFixed(1)}` : calibratedIMU.roll.toFixed(1)}°</span>

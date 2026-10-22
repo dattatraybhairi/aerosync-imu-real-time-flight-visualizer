@@ -26,19 +26,19 @@ export const PrimaryFlightDisplay: React.FC<PrimaryFlightDisplayProps> = ({ imuD
   const gForce = az ? (az / 9.81).toFixed(2) : '1.00';
 
   return (
-    <div className="flex flex-col bg-white/95 border border-slate-200/90 rounded-xl shadow-md p-3 select-none w-60">
+    <div className="flex flex-col bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-slate-800 rounded-xl shadow-md p-3 select-none w-60 transition-colors">
       {/* Top Header */}
-      <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-slate-100">
-        <span className="text-[11px] font-bold text-slate-800 tracking-wider">
+      <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-slate-100 dark:border-slate-800">
+        <span className="text-[11px] font-bold text-slate-800 dark:text-slate-100 tracking-wider">
           PRIMARY ATTITUDE
         </span>
-        <span className="text-[10px] font-mono font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60">
+        <span className="text-[10px] font-mono font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-200/60 dark:border-amber-800/60">
           {gForce} G
         </span>
       </div>
 
       {/* Artificial Horizon Sphere / Gauge */}
-      <div className="relative w-full h-36 rounded-lg overflow-hidden border border-slate-300 bg-slate-900 shadow-inner flex items-center justify-center">
+      <div className="relative w-full h-36 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-700 bg-slate-900 shadow-inner flex items-center justify-center">
         {/* Rotating & Translating Horizon Disk */}
         <div
           className="absolute w-[220%] h-[220%] transition-transform duration-75 will-change-transform pointer-events-none"
@@ -104,24 +104,24 @@ export const PrimaryFlightDisplay: React.FC<PrimaryFlightDisplayProps> = ({ imuD
       </div>
 
       {/* Digital Values Strip */}
-      <div className="grid grid-cols-3 gap-1.5 mt-2.5 pt-2 border-t border-slate-100 text-center font-mono">
-        <div className="bg-slate-50 p-1 rounded border border-slate-200/80">
-          <div className="text-[9px] font-sans font-semibold text-slate-500 uppercase">Pitch</div>
-          <div className="text-[11px] font-bold text-slate-800 tabular-nums">
+      <div className="grid grid-cols-3 gap-1.5 mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-center font-mono">
+        <div className="bg-slate-50 dark:bg-slate-800/80 p-1 rounded border border-slate-200/80 dark:border-slate-700">
+          <div className="text-[9px] font-sans font-semibold text-slate-500 dark:text-slate-400 uppercase">Pitch</div>
+          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-100 tabular-nums">
             {pitch >= 0 ? `+${pitch.toFixed(1)}` : pitch.toFixed(1)}°
           </div>
         </div>
 
-        <div className="bg-slate-50 p-1 rounded border border-slate-200/80">
-          <div className="text-[9px] font-sans font-semibold text-slate-500 uppercase">Roll</div>
-          <div className="text-[11px] font-bold text-slate-800 tabular-nums">
+        <div className="bg-slate-50 dark:bg-slate-800/80 p-1 rounded border border-slate-200/80 dark:border-slate-700">
+          <div className="text-[9px] font-sans font-semibold text-slate-500 dark:text-slate-400 uppercase">Roll</div>
+          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-100 tabular-nums">
             {roll >= 0 ? `+${roll.toFixed(1)}` : roll.toFixed(1)}°
           </div>
         </div>
 
-        <div className="bg-slate-50 p-1 rounded border border-slate-200/80">
-          <div className="text-[9px] font-sans font-semibold text-slate-500 uppercase">Yaw / Hdg</div>
-          <div className="text-[11px] font-bold text-slate-800 tabular-nums">
+        <div className="bg-slate-50 dark:bg-slate-800/80 p-1 rounded border border-slate-200/80 dark:border-slate-700">
+          <div className="text-[9px] font-sans font-semibold text-slate-500 dark:text-slate-400 uppercase">Yaw / Hdg</div>
+          <div className="text-[11px] font-bold text-slate-800 dark:text-slate-100 tabular-nums">
             {Math.round(yaw).toString().padStart(3, '0')}° {getHeadingCompassLabel(yaw)}
           </div>
         </div>

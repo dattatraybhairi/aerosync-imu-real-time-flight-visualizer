@@ -23,6 +23,7 @@ interface AeroViewportProps {
   cameraPreset: CameraPreset;
   showAxes: boolean;
   showGrid: boolean;
+  darkMode?: boolean;
 }
 
 export const AeroViewport: React.FC<AeroViewportProps> = ({
@@ -31,6 +32,7 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
   cameraPreset,
   showAxes,
   showGrid,
+  darkMode = false,
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const imuRef = useRef(imuData);
@@ -47,8 +49,12 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
 
   const controlsRef = useRef<OrbitControls | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const gridHelperRef = useRef<THREE.GridHelper | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const gridLightRef = useRef<THREE.GridHelper | null>(null);
+  const gridDarkRef = useRef<THREE.GridHelper | null>(null);
   const axesGroupRef = useRef<THREE.Group | null>(null);
+  const darkModeRef = useRef(darkMode);
+  darkModeRef.current = darkMode;
 
   useEffect(() => {
     const container = mountRef.current;
@@ -65,10 +71,12 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
       return /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
     })();
 
-    // 2. Setup Scene (Clean Daylight Aviation Atmosphere)
+    // 2. Setup Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf1f5f9);
-    scene.fog = new THREE.Fog(0xf1f5f9, 28, 68);
+    const initialBg = darkModeRef.current ? 0x0b1120 : 0xf1f5f9;
+    scene.background = new THREE.Color(initialBg);
+    scene.fog = new THREE.Fog(initialBg, 28, 68);
+    sceneRef.current = scene;
 
     // 3. Setup Camera
     const width = container.clientWidth || 800;
@@ -100,7 +108,7 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
     scene.environment = envTexture;
     pmremGenerator.dispose();
 
-    // 6. Three-Point Daylight Studio Rig
+    // 6. Three-Point Studio Rig
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xcbd5e1, 0.95);
     scene.add(hemiLight);
 
@@ -121,18 +129,23 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
     }
     scene.add(dirLight);
 
-    const rimLight = new THREE.DirectionalLight(0x94a3b8, 0.75);
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 0.85);
     rimLight.position.set(-7, 4, 8);
     scene.add(rimLight);
 
-    // 7. Ground Grid & Contact Shadow Plane
-    const grid = new THREE.GridHelper(50, 50, 0x94a3b8, 0xe2e8f0);
-    grid.position.y = -2.1;
-    scene.add(grid);
-    gridHelperRef.current = grid;
+    // 7. Ground Grids (Light & Dark) & Contact Shadow Plane
+    const gridLight = new THREE.GridHelper(50, 50, 0x94a3b8, 0xe2e8f0);
+    gridLight.position.y = -2.1;
+    scene.add(gridLight);
+    gridLightRef.current = gridLight;
+
+    const gridDark = new THREE.GridHelper(50, 50, 0x334155, 0x1e293b);
+    gridDark.position.y = -2.1;
+    scene.add(gridDark);
+    gridDarkRef.current = gridDark;
 
     const shadowPlaneGeo = new THREE.PlaneGeometry(24, 24);
-    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.18 });
+    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.22 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
     shadowPlane.rotation.x = -Math.PI / 2;
     shadowPlane.position.y = -2.09;
@@ -147,16 +160,16 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
     const ringPitchMat = new THREE.MeshBasicMaterial({
       color: 0xef4444,
       transparent: true,
-      opacity: 0.42,
+      opacity: 0.48,
     });
     axesGroup.add(new THREE.Mesh(ringPitchGeo, ringPitchMat));
 
     // Roll Ring (Blue Z)
     const ringRollGeo = new THREE.TorusGeometry(2.8, 0.014, 10, 64);
     const ringRollMat = new THREE.MeshBasicMaterial({
-      color: 0x0284c7,
+      color: 0x38bdf8,
       transparent: true,
-      opacity: 0.42,
+      opacity: 0.48,
     });
     axesGroup.add(new THREE.Mesh(ringRollGeo, ringRollMat));
 
@@ -166,7 +179,7 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
     const ringYawMat = new THREE.MeshBasicMaterial({
       color: 0x10b981,
       transparent: true,
-      opacity: 0.42,
+      opacity: 0.48,
     });
     axesGroup.add(new THREE.Mesh(ringYawGeo, ringYawMat));
 
@@ -244,8 +257,10 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
       const currentSelected = selectedRef.current;
       const showAx = axesRef.current;
       const showGr = gridRef.current;
+      const isDark = darkModeRef.current;
 
-      if (gridHelperRef.current) gridHelperRef.current.visible = showGr;
+      if (gridLightRef.current) gridLightRef.current.visible = showGr && !isDark;
+      if (gridDarkRef.current) gridDarkRef.current.visible = showGr && isDark;
       if (axesGroupRef.current) axesGroupRef.current.visible = showAx;
 
       const slerpFactor = isSoftwareGl ? 0.35 : 0.22;
@@ -302,6 +317,15 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
     };
   }, []);
 
+  // Dynamically switch 3D Scene Sky & Fog when darkMode changes
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+    const bgHex = darkMode ? 0x0b1120 : 0xf1f5f9;
+    scene.background = new THREE.Color(bgHex);
+    scene.fog = new THREE.Fog(bgHex, 28, 68);
+  }, [darkMode]);
+
   // Update Camera Preset smoothly
   useEffect(() => {
     const camera = cameraRef.current;
@@ -313,32 +337,26 @@ export const AeroViewport: React.FC<AeroViewportProps> = ({
 
     switch (cameraPreset) {
       case 'isometric':
-        // Front-quarter 3/4 view showing cockpit, nose, wings, and engines clearly
         camera.position.set(dist * 0.72, dist * 0.42, -dist * 0.75);
         controls.target.set(0, targetY, 0);
         break;
       case 'chase':
-        // Rear tail chase view
         camera.position.set(0, dist * 0.34, dist * 0.96);
         controls.target.set(0, targetY, 0);
         break;
       case 'cockpit_front':
-        // Head-on nose & engine intake inspection view
         camera.position.set(0, 0.45, -dist * 0.92);
         controls.target.set(0, targetY, 0);
         break;
       case 'wing_view':
-        // Starboard wingtip & engine nacelle perspective
         camera.position.set(dist * 0.9, 0.55, -1.2);
         controls.target.set(0, targetY, 0);
         break;
       case 'top':
-        // Planform overhead view
         camera.position.set(0, dist * 1.22, 0.01);
         controls.target.set(0, 0, 0);
         break;
       case 'side':
-        // Full fuselage profile view
         camera.position.set(dist * 1.1, 0.2, 0);
         controls.target.set(0, targetY, 0);
         break;

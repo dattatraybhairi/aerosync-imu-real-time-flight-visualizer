@@ -4,11 +4,18 @@ import { type IMUData } from '../utils/imuMath';
 interface TelemetryScopeProps {
   imuData: IMUData;
   packetRate: number;
+  darkMode?: boolean;
 }
 
-export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetRate }) => {
+export const TelemetryScope: React.FC<TelemetryScopeProps> = ({
+  imuData,
+  packetRate,
+  darkMode = false,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const historyRef = useRef<{ time: number; pitch: number; roll: number; yaw: number }[]>([]);
+  const darkRef = useRef(darkMode);
+  darkRef.current = darkMode;
 
   // Append new data to circular history buffer
   useEffect(() => {
@@ -19,7 +26,6 @@ export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetR
       roll: imuData.roll,
       yaw: imuData.yaw,
     });
-    // Keep last 150 points (~3-5 seconds of stream)
     if (history.length > 150) {
       history.shift();
     }
@@ -38,13 +44,14 @@ export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetR
       const w = canvas.width;
       const h = canvas.height;
       const history = historyRef.current;
+      const isDark = darkRef.current;
 
-      // Clean light background
-      ctx.fillStyle = '#ffffff';
+      // Background
+      ctx.fillStyle = isDark ? '#0f172a' : '#ffffff';
       ctx.fillRect(0, 0, w, h);
 
       // Grid lines
-      ctx.strokeStyle = '#f1f5f9';
+      ctx.strokeStyle = isDark ? '#1e293b' : '#f1f5f9';
       ctx.lineWidth = 1;
       ctx.beginPath();
       for (let y = 15; y < h; y += 20) {
@@ -55,7 +62,7 @@ export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetR
 
       // Zero baseline
       const midY = h / 2;
-      ctx.strokeStyle = '#cbd5e1';
+      ctx.strokeStyle = isDark ? '#334155' : '#cbd5e1';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(0, midY);
@@ -69,8 +76,6 @@ export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetR
 
       const step = w / 150;
       const startX = w - history.length * step;
-
-      // Scaling: +/- 90 degrees maps to 80% of half height
       const scaleY = (midY * 0.8) / 90;
 
       // Draw Pitch line (Red)
@@ -85,8 +90,8 @@ export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetR
       });
       ctx.stroke();
 
-      // Draw Roll line (Blue)
-      ctx.strokeStyle = '#0284c7';
+      // Draw Roll line (Sky Blue)
+      ctx.strokeStyle = isDark ? '#38bdf8' : '#0284c7';
       ctx.lineWidth = 2;
       ctx.beginPath();
       history.forEach((pt, i) => {
@@ -105,23 +110,25 @@ export const TelemetryScope: React.FC<TelemetryScopeProps> = ({ imuData, packetR
   }, []);
 
   return (
-    <div className="flex flex-col bg-white/95 border border-slate-200/80 rounded-xl p-3 shadow-sm select-none">
-      <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-slate-100 text-xs">
+    <div className="flex flex-col bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 rounded-xl p-3 shadow-sm select-none transition-colors">
+      <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-slate-100 dark:border-slate-800 text-xs">
         <div className="flex items-center gap-3">
-          <span className="font-semibold text-slate-800">REAL-TIME MOMENTS SCOPE</span>
+          <span className="font-semibold text-slate-800 dark:text-slate-100">REAL-TIME MOMENTS SCOPE</span>
           <div className="flex items-center gap-2 text-[11px] font-mono">
             <span className="text-red-500 font-medium">● Pitch</span>
-            <span className="text-sky-600 font-medium">● Roll</span>
+            <span className="text-sky-600 dark:text-sky-400 font-medium">● Roll</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500">
-          <span>Rate: <strong className="text-slate-800">{packetRate} Hz</strong></span>
+        <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500 dark:text-slate-400">
+          <span>
+            Rate: <strong className="text-slate-800 dark:text-slate-200">{packetRate} Hz</strong>
+          </span>
           <span>·</span>
           <span>Range: ±90°</span>
         </div>
       </div>
 
-      <div className="w-full h-20 rounded border border-slate-200 overflow-hidden bg-white">
+      <div className="w-full h-20 rounded border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900">
         <canvas
           ref={canvasRef}
           width={360}

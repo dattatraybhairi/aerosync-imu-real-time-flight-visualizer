@@ -350,11 +350,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 22
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Build static Vite application
         run: npm run build
@@ -418,18 +417,18 @@ jobs:
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center text-sky-700">
+            <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-950 flex items-center justify-center text-sky-700 dark:text-sky-400">
               <Cpu className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
                 ESP32 Firmware, Python Bridge & GitHub Pages
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Complete tested Arduino C++ code, macOS Python WebSocket server, and GitHub Pages CI/CD workflow
               </p>
             </div>
@@ -437,25 +436,25 @@ jobs:
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Strip */}
-        <div className="flex flex-wrap items-center justify-between px-6 py-2.5 bg-slate-100/90 border-b border-slate-200 text-xs gap-2">
+        <div className="flex flex-wrap items-center justify-between px-6 py-2.5 bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 text-xs gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
               onClick={() => setActiveTab('mpu6050')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
                 activeTab === 'mpu6050'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
-              <Cpu className="w-3.5 h-3.5 text-sky-600" />
+              <Cpu className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
               <span>ESP32 MPU-6050</span>
             </button>
 
@@ -464,11 +463,11 @@ jobs:
               onClick={() => setActiveTab('bno055')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
                 activeTab === 'bno055'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
-              <Cpu className="w-3.5 h-3.5 text-indigo-600" />
+              <Cpu className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>ESP32 BNO-055</span>
             </button>
 
@@ -477,11 +476,11 @@ jobs:
               onClick={() => setActiveTab('python')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
                 activeTab === 'python'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
-              <Terminal className="w-3.5 h-3.5 text-emerald-600" />
+              <Terminal className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>Mac Python Bridge</span>
             </button>
 
@@ -490,11 +489,11 @@ jobs:
               onClick={() => setActiveTab('wiring')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
                 activeTab === 'wiring'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
-              <Cable className="w-3.5 h-3.5 text-amber-600" />
+              <Cable className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span>Wiring & Pins</span>
             </button>
 
@@ -503,11 +502,11 @@ jobs:
               onClick={() => setActiveTab('github')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
                 activeTab === 'github'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
-              <Github className="w-3.5 h-3.5 text-slate-800" />
+              <Github className="w-3.5 h-3.5 text-slate-800 dark:text-slate-200" />
               <span>GitHub Pages</span>
             </button>
           </div>
@@ -516,17 +515,17 @@ jobs:
             <button
               type="button"
               onClick={handleDownload}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-800 border border-slate-200 rounded-lg shadow-xs hover:bg-slate-50 transition-colors font-medium cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium cursor-pointer"
               title={`Download ${currentFilename}`}
             >
-              <Download className="w-3.5 h-3.5 text-sky-600" />
+              <Download className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
               <span>Download</span>
             </button>
 
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-800 border border-slate-200 rounded-lg shadow-xs hover:bg-slate-50 transition-colors font-medium cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-medium cursor-pointer"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-slate-500" />}
               <span>{copied ? 'Copied!' : 'Copy Code'}</span>
@@ -542,7 +541,7 @@ jobs:
         </div>
 
         {/* Footer Notes */}
-        <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+        <div className="px-6 py-3 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 flex items-center justify-between">
           <span>
             {activeTab === 'mpu6050' && 'Flash using Arduino IDE. Streams CSV "pitch,roll,yaw,ax,ay,az" at 50Hz over USB serial.'}
             {activeTab === 'bno055' && 'Hardware 9-DOF fusion with zero gyro drift. Output format is 100% compatible.'}
@@ -553,7 +552,7 @@ jobs:
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            className="px-4 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
           >
             Close
           </button>

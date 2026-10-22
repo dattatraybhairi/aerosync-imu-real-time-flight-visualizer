@@ -321,11 +321,11 @@ export function createAirbusA350(): AircraftInstance {
   group.add(nose);
 
   // Signature A350 Black Bandit Mask Cockpit Visor flush on Nose
-  const maskGeo = new THREE.CapsuleGeometry(0.22, 0.32, 12, 20);
+  const maskGeo = new THREE.CapsuleGeometry(0.19, 0.28, 12, 20);
   maskGeo.rotateZ(Math.PI / 2);
   const mask = new THREE.Mesh(maskGeo, cockpitMaskMat);
-  mask.position.set(0, 0.31, -2.75);
-  mask.scale.set(1.05, 0.68, 1.25);
+  mask.position.set(0, 0.24, -2.65);
+  mask.scale.set(0.92, 0.42, 0.95);
   mask.rotation.x = -0.32;
   group.add(mask);
 
@@ -549,11 +549,11 @@ export function createBoeing787(): AircraftInstance {
   nose.position.z = -2.15;
   group.add(nose);
 
-  const visorGeo = new THREE.CapsuleGeometry(0.21, 0.32, 12, 20);
+  const visorGeo = new THREE.CapsuleGeometry(0.18, 0.26, 12, 20);
   visorGeo.rotateZ(Math.PI / 2);
   const visor = new THREE.Mesh(visorGeo, cockpitGlassMat);
-  visor.position.set(0, 0.3, -2.7);
-  visor.scale.set(1.02, 0.65, 1.2);
+  visor.position.set(0, 0.23, -2.6);
+  visor.scale.set(0.9, 0.4, 0.95);
   visor.rotation.x = -0.3;
   group.add(visor);
 
@@ -723,11 +723,11 @@ export function createBoeing747(): AircraftInstance {
   group.add(hump);
 
   // Upper Deck Cockpit Windshield
-  const cockpitGeo = new THREE.CapsuleGeometry(0.2, 0.3, 12, 20);
+  const cockpitGeo = new THREE.CapsuleGeometry(0.16, 0.24, 12, 20);
   cockpitGeo.rotateZ(Math.PI / 2);
   const cockpit = new THREE.Mesh(cockpitGeo, glassMat);
-  cockpit.position.set(0, 0.44, -1.98);
-  cockpit.scale.set(1.0, 0.65, 1.2);
+  cockpit.position.set(0, 0.38, -1.94);
+  cockpit.scale.set(0.88, 0.42, 0.9);
   cockpit.rotation.x = -0.32;
   group.add(cockpit);
 
@@ -911,11 +911,11 @@ export function createAirbusA380(): AircraftInstance {
   nose.scale.set(0.96, 1.18, 1.0);
   group.add(nose);
 
-  const cockpitGeo = new THREE.CapsuleGeometry(0.23, 0.34, 12, 20);
+  const cockpitGeo = new THREE.CapsuleGeometry(0.19, 0.28, 12, 20);
   cockpitGeo.rotateZ(Math.PI / 2);
   const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
-  cockpit.position.set(0, 0.26, -2.85);
-  cockpit.scale.set(1.02, 0.65, 1.2);
+  cockpit.position.set(0, 0.18, -2.82);
+  cockpit.scale.set(0.9, 0.42, 0.95);
   cockpit.rotation.x = -0.35;
   group.add(cockpit);
 

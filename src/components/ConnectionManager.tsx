@@ -380,17 +380,17 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
   return (
     <div className="flex flex-col gap-3">
       {/* Source Selector Segmented Buttons */}
-      <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 rounded-lg">
+      <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
         <button
           type="button"
           onClick={requestAndStartDeviceIMU}
           className={`flex items-center gap-1.5 flex-1 justify-center px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
             currentSource === 'device_imu'
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
           }`}
         >
-          <Smartphone className="w-3.5 h-3.5 text-amber-600" />
+          <Smartphone className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
           <span>Local Device IMU (Phone / Tab / Laptop)</span>
         </button>
 
@@ -399,11 +399,11 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
           onClick={() => onSourceChange('simulation')}
           className={`flex items-center gap-1.5 flex-1 justify-center px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
             currentSource === 'simulation'
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
           }`}
         >
-          <Play className="w-3.5 h-3.5 text-sky-600" />
+          <Play className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
           <span>Auto Flight Sim</span>
         </button>
 
@@ -412,11 +412,11 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
           onClick={() => onSourceChange('webserial')}
           className={`flex items-center gap-1.5 flex-1 justify-center px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
             currentSource === 'webserial'
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
           }`}
         >
-          <Cable className="w-3.5 h-3.5 text-emerald-600" />
+          <Cable className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
           <span>WebSerial (ESP32)</span>
         </button>
 
@@ -425,23 +425,23 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
           onClick={() => onSourceChange('websocket')}
           className={`flex items-center gap-1.5 flex-1 justify-center px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
             currentSource === 'websocket'
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
           }`}
         >
-          <Wifi className="w-3.5 h-3.5 text-indigo-600" />
+          <Wifi className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
           <span>WebSocket (Python)</span>
         </button>
       </div>
 
       {/* Mode 1: Local Device IMU (Phone / Tablet / Laptop) */}
       {currentSource === 'device_imu' && (
-        <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/80 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           {/* Left Column: Device Sensor Status & Permission */}
           <div className="md:col-span-7 flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-amber-600" />
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                <Compass className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>On-Device Accelerometer & Gyroscope Stream</span>
               </span>
               <button
@@ -453,22 +453,22 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
               </button>
             </div>
 
-            <p className="text-[11px] text-slate-600 leading-relaxed">
+            <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
               {hardwareEventsReceived > 0 ? (
-                <span className="text-emerald-700 font-semibold">
+                <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
                   Hardware IMU Active ({hardwareEventsReceived} packets) — Tilt your phone, tablet, or convertible laptop in 3D space to control the aircraft!
                 </span>
               ) : (
                 <span>
-                  Listening to <code className="font-mono bg-slate-200/70 px-1 rounded">DeviceOrientation</code> &{' '}
-                  <code className="font-mono bg-slate-200/70 px-1 rounded">DeviceMotion</code> sensors. On a MacBook or desktop without a hardware gyro, glide across the <strong>Laptop Trackpad Tilt Pad</strong> on the right or press <strong>WASD / Arrow Keys</strong>.
+                  Listening to <code className="font-mono bg-slate-200/70 dark:bg-slate-700 px-1 rounded">DeviceOrientation</code> &{' '}
+                  <code className="font-mono bg-slate-200/70 dark:bg-slate-700 px-1 rounded">DeviceMotion</code> sensors. On a MacBook or desktop without a hardware gyro, glide across the <strong>Laptop Trackpad Tilt Pad</strong> on the right or press <strong>WASD / Arrow Keys</strong>.
                 </span>
               )}
             </p>
 
             {/* Yaw Heading Slider + Center Level button */}
             <div className="flex items-center gap-3 pt-1">
-              <span className="text-[11px] font-semibold text-slate-700 whitespace-nowrap">
+              <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">
                 Heading (Yaw): {trackpadPos.yaw}°
               </span>
               <input
@@ -491,7 +491,7 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                   setTrackpadPos({ pitch: 0, roll: 0, yaw: 0 });
                   onReceiveRawData(deviceOrientationToIMU(0, 0, 0, 0));
                 }}
-                className="px-2.5 py-1 text-[11px] font-semibold bg-white border border-slate-300 rounded hover:bg-slate-100 text-slate-700 cursor-pointer whitespace-nowrap"
+                className="px-2.5 py-1 text-[11px] font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 cursor-pointer whitespace-nowrap"
               >
                 Level (0°)
               </button>
@@ -536,16 +536,16 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
 
       {/* Mode 2: Auto Flight Simulation */}
       {currentSource === 'simulation' && (
-        <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col gap-3">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/80 flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-700">Flight Mode:</span>
-              <div className="flex items-center gap-1 bg-slate-200/70 p-0.5 rounded-md text-xs">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">Flight Mode:</span>
+              <div className="flex items-center gap-1 bg-slate-200/70 dark:bg-slate-700 p-0.5 rounded-md text-xs">
                 <button
                   type="button"
                   onClick={() => setManualMode(false)}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
-                    !manualMode ? 'bg-white font-semibold text-slate-800 shadow-xs' : 'text-slate-600'
+                    !manualMode ? 'bg-white dark:bg-slate-800 font-semibold text-slate-800 dark:text-white shadow-xs' : 'text-slate-600 dark:text-slate-300'
                   }`}
                 >
                   Aerodynamic Presets
@@ -554,7 +554,7 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                   type="button"
                   onClick={() => setManualMode(true)}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
-                    manualMode ? 'bg-white font-semibold text-slate-800 shadow-xs' : 'text-slate-600'
+                    manualMode ? 'bg-white dark:bg-slate-800 font-semibold text-slate-800 dark:text-white shadow-xs' : 'text-slate-600 dark:text-slate-300'
                   }`}
                 >
                   Manual Sliders
@@ -568,7 +568,7 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                 onClick={() => setIsSimulating(!isSimulating)}
                 className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
                   isSimulating
-                    ? 'bg-amber-100 text-amber-800 hover:bg-amber-200'
+                    ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 hover:bg-amber-200'
                     : 'bg-emerald-600 text-white hover:bg-emerald-700'
                 }`}
               >
@@ -595,8 +595,8 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                   }}
                   className={`px-3 py-1.5 text-xs rounded-lg border transition-colors cursor-pointer ${
                     simManeuver === m.id
-                      ? 'bg-sky-50 border-sky-300 text-sky-800 font-semibold'
-                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+                      ? 'bg-sky-50 dark:bg-sky-950/80 border-sky-300 dark:border-sky-600 text-sky-800 dark:text-sky-200 font-semibold'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
                 >
                   {m.label}
@@ -605,10 +605,10 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-              <div className="flex flex-col gap-1 bg-white p-2.5 rounded border border-slate-200">
+              <div className="flex flex-col gap-1 bg-white dark:bg-slate-800 p-2.5 rounded border border-slate-200 dark:border-slate-700">
                 <div className="flex justify-between text-xs">
-                  <span className="font-semibold text-red-600">Pitch (Nose Up/Down)</span>
-                  <span className="font-mono">{manualPitch}°</span>
+                  <span className="font-semibold text-red-600 dark:text-red-400">Pitch (Nose Up/Down)</span>
+                  <span className="font-mono dark:text-slate-200">{manualPitch}°</span>
                 </div>
                 <input
                   type="range"
@@ -620,10 +620,10 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                 />
               </div>
 
-              <div className="flex flex-col gap-1 bg-white p-2.5 rounded border border-slate-200">
+              <div className="flex flex-col gap-1 bg-white dark:bg-slate-800 p-2.5 rounded border border-slate-200 dark:border-slate-700">
                 <div className="flex justify-between text-xs">
-                  <span className="font-semibold text-sky-600">Roll (Bank Wings)</span>
-                  <span className="font-mono">{manualRoll}°</span>
+                  <span className="font-semibold text-sky-600 dark:text-sky-400">Roll (Bank Wings)</span>
+                  <span className="font-mono dark:text-slate-200">{manualRoll}°</span>
                 </div>
                 <input
                   type="range"
@@ -635,10 +635,10 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                 />
               </div>
 
-              <div className="flex flex-col gap-1 bg-white p-2.5 rounded border border-slate-200">
+              <div className="flex flex-col gap-1 bg-white dark:bg-slate-800 p-2.5 rounded border border-slate-200 dark:border-slate-700">
                 <div className="flex justify-between text-xs">
-                  <span className="font-semibold text-emerald-600">Yaw (Compass Heading)</span>
-                  <span className="font-mono">{manualYaw}°</span>
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">Yaw (Compass Heading)</span>
+                  <span className="font-mono dark:text-slate-200">{manualYaw}°</span>
                 </div>
                 <input
                   type="range"
@@ -656,15 +656,15 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
 
       {/* Mode 3: WebSerial */}
       {currentSource === 'webserial' && (
-        <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col gap-3">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/80 flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <label className="text-xs font-semibold text-slate-700">Baud Rate:</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-200">Baud Rate:</label>
               <select
                 value={serialBaud}
                 onChange={(e) => setSerialBaud(parseInt(e.target.value, 10))}
                 disabled={serialConnected}
-                className="text-xs bg-white border border-slate-300 rounded px-2 py-1 text-slate-800"
+                className="text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-slate-800 dark:text-slate-100"
               >
                 <option value={115200}>115200 (Standard ESP32)</option>
                 <option value={9600}>9600</option>
@@ -680,7 +680,7 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                 <button
                   type="button"
                   onClick={disconnectSerial}
-                  className="px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg transition-colors cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 border border-rose-200 dark:border-rose-800 rounded-lg transition-colors cursor-pointer"
                 >
                   Disconnect ESP32
                 </button>
@@ -698,8 +698,8 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
           </div>
 
           {!hasWebSerial && (
-            <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800">
-              <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+            <div className="flex items-center gap-2 p-2 bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded text-xs text-amber-800 dark:text-amber-300">
+              <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />
               <span>
                 WebSerial API is supported in Chrome, Edge, and Opera on macOS/Windows/Linux.
               </span>
@@ -707,15 +707,15 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
           )}
 
           {serialError && (
-            <div className="flex items-center gap-2 p-2 bg-rose-50 border border-rose-200 rounded text-xs text-rose-800">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <div className="flex items-center gap-2 p-2 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded text-xs text-rose-800 dark:text-rose-300">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
               <span>{serialError}</span>
             </div>
           )}
 
           {serialConnected && (
-            <div className="flex items-center gap-2 text-xs text-emerald-700 font-medium">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 font-medium">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Connected to ESP32 over Serial Bus. Receiving real-time IMU packets.</span>
             </div>
           )}
@@ -724,10 +724,10 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
 
       {/* Mode 4: WebSocket */}
       {currentSource === 'websocket' && (
-        <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col gap-3">
+        <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/80 flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 flex-1 max-w-md">
-              <label className="text-xs font-semibold text-slate-700 whitespace-nowrap">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">
                 Server URL:
               </label>
               <input
@@ -736,7 +736,7 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                 onChange={(e) => setWsUrl(e.target.value)}
                 disabled={wsConnected || wsConnecting}
                 placeholder="ws://localhost:8765"
-                className="w-full text-xs font-mono bg-white border border-slate-300 rounded px-2.5 py-1 text-slate-800"
+                className="w-full text-xs font-mono bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-slate-800 dark:text-slate-100"
               />
             </div>
 
@@ -745,7 +745,7 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
                 <button
                   type="button"
                   onClick={disconnectWebSocket}
-                  className="px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg transition-colors cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-semibold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 border border-rose-200 dark:border-rose-800 rounded-lg transition-colors cursor-pointer"
                 >
                   Disconnect WebSocket
                 </button>
@@ -764,15 +764,15 @@ export const ConnectionManager: React.FC<ConnectionManagerProps> = ({
           </div>
 
           {wsError && (
-            <div className="flex items-center gap-2 p-2 bg-rose-50 border border-rose-200 rounded text-xs text-rose-800">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <div className="flex items-center gap-2 p-2 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 rounded text-xs text-rose-800 dark:text-rose-300">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
               <span>{wsError}</span>
             </div>
           )}
 
           {wsConnected && (
-            <div className="flex items-center gap-2 text-xs text-emerald-700 font-medium">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 font-medium">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>WebSocket stream active. Connected to Python IMU bridge.</span>
             </div>
           )}
